@@ -80,3 +80,11 @@ export const DeliveryProvider =  ({children}: {children: ReactNode}): JSX.Elemen
         </DeliveryContext.Provider>
     );
 } 
+
+export const useDelivery = () => {
+    const context = useContext(DeliveryContext);
+    if (!context){
+        throw new Error('ERROR');
+    }
+    return context;
+}

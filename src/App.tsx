@@ -1,16 +1,21 @@
 import { useState } from 'react';
 import { GenericList } from './components/GenericList';
 import { DeliveryCard } from './components/DeliveryCard';
-
+import { useDelivery } from './context/DeliveryContext';
+import { CourierManager } from './components/CourierManager';
 
 const DashboardConsole = (): JSX.Element => {
+  const { state, assignCourierToOrder } = useDelivery();
 
+  if(state.status === 'LOADING') return <h2>Загрузка данных</h2>;
+  if(state.status === 'ERROR') return <h2>{state.message}</h2>
 
-  const filteredOrders;
+  const filteredOrders = state.status === 'SUCCESS' ? state.data : [];
 
   const handleInteractOrder = (id: string) => {
     const courierName = prompt('Введите имя курьера');
     if (courierName) {
+      assignCourierToOrder(id, courierName);
     }
   }
 
@@ -33,18 +38,26 @@ const DashboardConsole = (): JSX.Element => {
         gap: '24px'
       }}
         >
-          <h2>Активные заказы</h2>
-          <GenericList
-            items={filteredOrders}
-            emptyPlaceholder='Заказы не найдены'
-            renderItem={(order) => {
-              <DeliveryCard 
-                order={order}
-                onSelectedOrder={handleInteractOrder}
-              />
-            }}
-          />
+          <div>
+            <h2>Активные заказы</h2>
+            <GenericList
+              items={filteredOrders}
+              emptyPlaceholder='Заказы не найдены'
+              renderItem={(order) => (
+                <DeliveryCard 
+                  order={order}
+                  onSelectedOrder={handleInteractOrder}
+                />
+              )}
+            />
+          </div>
+          <div>
+            <h2>Персонал</h2>
+            <CourierManager />
+          </div>
         </div>
     </div>
   );
 }
+
+export default DashboardConsole;
