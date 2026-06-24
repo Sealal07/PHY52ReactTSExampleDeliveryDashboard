@@ -10,10 +10,10 @@ export const CourierManager = () : JSX.Element => {
   
     const [selectedTransport, setSelectedTransport] = useState<TransportType | null>(null);
 
-    const [newCourierName, setNewCourierName] = useState<string>();
+    const [newCourierName, setNewCourierName] = useState<string>('');
     
     const handleAddCourier = (e: React.FormEvent) => {
-        e.preventDefault;
+        e.preventDefault();
         if(!newCourierName.trim() || !selectedTransport) return;
 
         const newCourier: Courier = {
